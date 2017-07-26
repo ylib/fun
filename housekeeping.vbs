@@ -92,7 +92,7 @@ end sub
 
   if oFolder.Files.Count = 0 and oFolder.SubFolders.Count = 0 and ubound(split(sPath,"\")) > Depth + 2 then
     if Folders.Exists(sPath) then
-      if DatePart("h",now) = Hour and cInt(Folders(sPath)) > Limits("folders") then
+      if (DatePart("h",now) = Hour and cInt(Folders(sPath)) > cInt(Limits("folders"))) then
         on error resume next
         oFolder.Delete
         if Err.Number <> 0 then
@@ -113,7 +113,7 @@ end sub
       if left(oFile.Name,1) <> "." and not (oFile.Attributes and 2) then
         if sFile = Deunicode(sFile) then
           if Files.Exists(sFile) then
-            if DatePart("h",now) = Hour and cInt(Files(sFile)) > Limits("files") then
+            if (DatePart("h",now) = Hour and cInt(Files(sFile)) > cInt(Limits("files"))) then
               on error resume next
               oFile.Delete
               if Err.Number <> 0 then
@@ -154,7 +154,6 @@ end sub
     for each sLimit in aLimits
       aLimit = split(lcase(sLimit),":")
       if (ubound(aLimit) > 0 and Limits.Exists(aLimit(0))) and isnumeric(aLimit(1)) then Limits(aLimit(0)) = aLimit(1)
-      msgbox sServer & " is " & sLimit
     next
   end if
 end sub
